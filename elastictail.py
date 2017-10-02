@@ -23,6 +23,8 @@ try:
     parser.add_argument('-T', '--type', help='Type of log to show, defaults to all', default='all', dest='type', metavar='')
     parser.add_argument('-K', '--key', help='Key to search elasticsearch, this options should be entered with -V or --value argument', dest='key', metavar='')
     parser.add_argument('-V', '--value', help='Value to search elasticsearch, this option should be entered with -K or --key argument', dest='value', metavar='')
+    parser.add_argument('--timezone', help='timezone value, defaults to America/New_York', default='America/New_York', dest='timezone', metavar='')
+    parser.add_argument('--interval', help='interval value to query elasticsearch in seconds, defaults to 20', default=20, type=int, dest='interval', metavar='')
     args = parser.parse_args()
 
     #Function that handles Ctrl+C
@@ -60,7 +62,7 @@ try:
 
     #Setting time for search, 20 seconds ago to now
     time_now_millis = int(round(time() * 1000))
-    previous_time = time_now_millis-20000
+    previous_time = time_now_millis-(args.interval * 1000)
 
     #Build the query:
     search_query =  {
@@ -103,9 +105,9 @@ try:
             #Convert to UTC
             datetime_obj_utc = datetime_obj.replace(tzinfo=timezone('UTC'))
             #Convert to EST
-            now_est = datetime_obj_utc.astimezone(timezone('America/New_York'))
+            now_timezone = datetime_obj_utc.astimezone(timezone(args.timezone))
             #Convert to String
-            now_est_string = now_est.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
+            now_timezone_string = now_timezone.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
             #Handling Unicode messages and encoding it to utf-8
             if not hit['_source']['message']:
                 message_final = ''
@@ -124,12 +126,12 @@ try:
                     level_final = '\033[38;5;68m%s\033[0m' % hit['_source']['level']
             else:
                 level_final = ''
-            print("{t} \033[38;5;104m{host}\033[0m {type} {l}: {m}".format(t=now_est_string, m=message_final, l=level_final, **hit["_source"]))
+            print("{t} \033[38;5;104m{host}\033[0m {type} {l}: {m}".format(t=now_timezone_string, m=message_final, l=level_final, **hit["_source"]))
 
 
 
-        #Wait 20 seconds until next search
-        sleep(20)
+        #Wait args.interval seconds until next search
+        sleep(args.interval)
         previous_time = time_now_millis
         time_now_millis = int(round(time() * 1000))
         #Change timestamp
