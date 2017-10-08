@@ -60,7 +60,7 @@ try:
     #Initialize elasticsearch
     es_client = Elasticsearch(retry_on_timeout=True)
 
-    #Setting time for search, 20 seconds ago to now
+    #Setting time for search, args.interval seconds ago to now
     time_now_millis = int(round(time() * 1000))
     previous_time = time_now_millis-(args.interval * 1000)
 
