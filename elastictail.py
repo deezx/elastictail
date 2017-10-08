@@ -104,7 +104,7 @@ try:
             datetime_obj = datetime.strptime(hit['_source']['@timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
             #Convert to UTC
             datetime_obj_utc = datetime_obj.replace(tzinfo=timezone('UTC'))
-            #Convert to EST
+            #Convert to args.timezone
             now_timezone = datetime_obj_utc.astimezone(timezone(args.timezone))
             #Convert to String
             now_timezone_string = now_timezone.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
