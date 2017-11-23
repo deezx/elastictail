@@ -121,7 +121,7 @@ try:
                 elif hit['_source']['level'].lower() == 'warn':
                     level_final = '\033[38;5;220m%s\033[0m' % hit['_source']['level']
                 elif hit['_source']['level'].lower() == 'error':
-                    level_final = '\033[38;5;196%s\033[0m' % hit['_source']['level']
+                    level_final = '\033[38;5;196m%s\033[0m' % hit['_source']['level']
                 elif hit['_source']['level'].lower() == 'debug':
                     level_final = '\033[38;5;68m%s\033[0m' % hit['_source']['level']
             else:
