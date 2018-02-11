@@ -25,6 +25,7 @@ try:
     parser.add_argument('-V', '--value', help='Value to search elasticsearch, this option should be entered with -K or --key argument', dest='value', metavar='')
     parser.add_argument('--timezone', help='timezone value, defaults to America/New_York', default='America/New_York', dest='timezone', metavar='')
     parser.add_argument('--interval', help='interval value to query elasticsearch in seconds, defaults to 20', default=20, type=int, dest='interval', metavar='')
+    parser.add_argument('--run-once', help='Run tail only once and exit', action='store_true', dest='runonce')
     args = parser.parse_args()
 
     #Function that handles Ctrl+C
@@ -80,9 +81,10 @@ try:
     if args.hostname:
         if isinstance(args.hostname,list):
             for hostname in args.hostname:
-                add_to_should_query('host.raw',hostname)
+                add_to_should_query('beat.hostname.raw',hostname)
         else:
-            add_to_should_query('host.raw',args.hostname)
+            add_to_should_query('beat.hostname.raw',args.hostname)
+
 
     #Check other arguments
     if args.key and args.value:
@@ -128,7 +130,9 @@ try:
                 level_final = ''
             print("{t} \033[38;5;104m{host}\033[0m {type} {l}: {m}".format(t=now_timezone_string, m=message_final, l=level_final, **hit["_source"]))
 
-
+            #If run once options, run one time and exit
+            if args.runonce:
+                exit(0)
 
         #Wait args.interval seconds until next search
         sleep(args.interval)
