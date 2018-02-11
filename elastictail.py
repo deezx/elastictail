@@ -130,9 +130,9 @@ try:
                 level_final = ''
             print("{t} \033[38;5;104m{host}\033[0m {type} {l}: {m}".format(t=now_timezone_string, m=message_final, l=level_final, **hit["_source"]))
 
-            #If run once options, run one time and exit
-            if args.runonce:
-                exit(0)
+        #If run once options, run one time and exit
+        if args.runonce:
+            exit(0)
 
         #Wait args.interval seconds until next search
         sleep(args.interval)
