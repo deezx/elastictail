@@ -36,7 +36,7 @@ try:
     #Function that runs a search with specified parameters
     #TODO: add scroll option to show all logs and not just es_size number of logs
     def elasticsearch_query(es_client,es_index,es_size,query):
-        response = es_client.search(index=es_index,sort="@timestamp:asc",size=es_size, body=query)
+        response = es_client.search(index=es_index,sort="host.raw,@timestamp:asc",size=es_size, body=query)
         return response
 
     #Function that adds 'must' values to search query
