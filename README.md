@@ -14,4 +14,5 @@ optional arguments:
   -V , --value          Value to search elasticsearch, this option should be entered with -K or --key argument
   --timezone            timezone value, defaults to America/New_York
   --interval            interval value to query elasticsearch in seconds, defaults to 20
+  --run-once            Run tail only once and exit
 </pre>  
